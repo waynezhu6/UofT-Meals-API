@@ -1,0 +1,20 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Experimenting with creating cloud APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wayne Zhu",
+  "license": "ISC",
+  "dependencies": {
+    "cron": "^1.8.2",
+    "download-pdf": "^0.1.6",
+    "express": "^4.17.1",
+    "fresh-tabula-js": "^2.0.0",
+    "mongoose": "^5.9.2",
+    "papaparse": "^5.1.1",
+    "tabula-js": "^1.0.1"
+  }
+}
