@@ -8,7 +8,7 @@ var routes = require('./api/routes/routes.js'); //importing route
 var Menu = require('./menu.js');
   
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
 
 app.use(cors({credentials: true, origin: true}));
 

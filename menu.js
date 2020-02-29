@@ -16,7 +16,7 @@ class Menu{
       var files = ['./Breakfast.pdf', './Lunch.pdf', './Dinner.pdf'];
       var collections = ['Breakfast', 'Lunch', 'Dinner'];
   
-      for(var i = 0; i < 1; i++){
+      for(var i = 0; i < 3; i++){
         var fileName = files[i];
         var data = await this.extractData(fileName);
         data = this.formatArray(data);
@@ -96,18 +96,20 @@ class Menu{
   
       var categories = [];
       for(var i = 2; i < array.length; i++){
-        categories.push(array[i][0]);
+        categories.push(clean(array[i][0]));
       }
   
-      var menuObj = {}
+      var menuObj = []
   
       for(var j = 1; j < 8; j++){
         var obj = {}
+        obj['Day'] = days[j-1];
+
         for(var i = 0; i < categories.length; i++){
           obj[categories[i]] = clean(array[i + 2][j]);
         }
-  
-        menuObj[days[j-1]] = obj;
+        
+        menuObj[j - 1] = obj;
       }
   
       return menuObj;
@@ -120,8 +122,12 @@ class Menu{
       mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
       .then(() => {
         db = mongoose.connection.db;
-        db.collection(collection).deleteOne({});
-        db.collection(collection).insertOne(data);
+        for(var i = 0; i < 7; i++){
+          db.collection(collection).deleteOne({});
+        }
+        for(var i = 0; i < 7; i++){
+          db.collection(collection).insertOne(data[i]);
+        }
       })
       .catch((err) => console.error(err));
     }
