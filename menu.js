@@ -1,7 +1,7 @@
 const papaparse = require('papaparse'); 
-const fs = require('fs');
 const tabula = require('fresh-tabula-js');
 const download = require('download-pdf');
+const mongoose = require('mongoose');
 
 class Menu{
 
@@ -16,7 +16,7 @@ class Menu{
       var files = ['./Breakfast.pdf', './Lunch.pdf', './Dinner.pdf'];
       var collections = ['Breakfast', 'Lunch', 'Dinner'];
   
-      for(var i = 0; i < 3; i++){
+      for(var i = 0; i < 1; i++){
         var fileName = files[i];
         var data = await this.extractData(fileName);
         data = this.formatArray(data);
@@ -27,7 +27,6 @@ class Menu{
   
     getWeeklyString(date){
       // gets a week string for the week containing date
-      var lastMonday = date.setDate(date.getDate() - (date.getDay() + 6) % 7);
       return "Feb24_Mar1"
     }
   
@@ -59,7 +58,7 @@ class Menu{
         const table = new tabula(fileName, {spreadsheet: true});
         var text = await table.extractCsv().output;   
         text = text.replace(/\r/g, " ");
-  
+        text = text.replace(/\uFFFD/g, 'e')
         return this.parseText(text);
   
       }
@@ -74,6 +73,10 @@ class Menu{
   
       var parse = papaparse.parse(text).data;
       var table = [];
+
+      if(parse[0][0].length > 9){
+          parse.shift();
+      }
   
       for(var i = 0; i < parse.length; i++){
         var row = parse[i];
@@ -84,7 +87,6 @@ class Menu{
           table.push(parse[i]);
         }
       }
-  
       return table;
     }
   
@@ -102,7 +104,7 @@ class Menu{
       for(var j = 1; j < 8; j++){
         var obj = {}
         for(var i = 0; i < categories.length; i++){
-          obj[categories[i]] = array[i + 2][j];
+          obj[categories[i]] = clean(array[i + 2][j]);
         }
   
         menuObj[days[j-1]] = obj;
@@ -111,11 +113,25 @@ class Menu{
       return menuObj;
     }
   
-    updateDatabase(collection, data){
-      // db.collection(collections[i]).deleteOne({});
-      // db.collection(collections[i]).insertOne(data);
+    async updateDatabase(collection, data){
+
+      const connectionString = 'mongodb+srv://admin:z3ymsq4sRQiR6OCD@cluster-ws8ib.gcp.mongodb.net/UofT_Meals_API?retryWrites=true&w=majority';
+      var db;
+      mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
+      .then(() => {
+        db = mongoose.connection.db;
+        db.collection(collection).deleteOne({});
+        db.collection(collection).insertOne(data);
+      })
+      .catch((err) => console.error(err));
     }
   
+}
+
+function clean(str){
+  str = str.replace('"', "\"");
+  str = str.replace("'", "\'");
+  return str;
 }
 
 module.exports = Menu;
