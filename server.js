@@ -37,4 +37,4 @@ const job = cron.job(' 1 12 * * MON', () => {
   menu.update();
 });
 
-job.start();
+job.start()
