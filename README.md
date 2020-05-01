@@ -14,7 +14,7 @@ I also made an simple client with React that calls my API, formats, then display
 ### Example Endpoints:
 
   -https://uoft-dining-menu-api.appspot.com/new_college  
-  Returns all available data about this week's menues.  
+  Returns all available data about this week's menus.  
   
   -https://uoft-dining-menu-api.appspot.com/new_college/[DAY]  
   Returns [DAY]'s menu, where day is ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
