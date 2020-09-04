@@ -15,7 +15,7 @@
     "express": "^4.17.1",
     "fresh-tabula-js": "^2.0.0",
     "mongoose": "^5.9.2",
-    "papaparse": "^5.1.1",
+    "papaparse": "^5.2.0",
     "tabula-js": "^1.0.1"
   }
 }
